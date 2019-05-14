@@ -1,0 +1,43 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>welcome to k-roller</title>
+    <link href="/static/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+</head>
+<body>
+{% include "./nav.html" %}
+{% if session['logged_in'] %}
+    <br />
+    <div class="container">
+        <h4>transaction</h4><br />
+        <form action="/transaction/make" method="POST">
+            <label>sender:</label><br />
+            <input type="text" name="sender" id="sender" /><br /><br />
+            <label>recipient:</label><br />
+            <input type="text" name="recipient" id="recipient" /><br /><br />
+            <label>amount:</label><br />
+            <input type="text" name="amount" id="amount" /><br /><br />
+            <input type="submit" value="TRANSACTION" />
+        </form>
+    </div>
+
+    <script src="/static/jquery/jquery-3.4.1.min.js"></script>
+    <script src="/static/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#sender").val("{{user}}");
+        });
+    </script>
+{% else %}
+    <br />
+    <div class="container">
+        <h4>you must login to make a transaction</h4>
+        <br />
+        <a href="/login">LOGIN</a>
+    </div>
+{% endif %}
+</body>
+</html>

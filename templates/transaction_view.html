@@ -1,0 +1,79 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>welcome to k-roller</title>
+    <link rel="stylesheet" href="/static/bootstrap/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/static/DataTables/datatables.min.css" />
+</head>
+<body>
+{% include "./nav.html" %}
+{% if session['logged_in'] %}
+    <br />
+    <div class="container">
+        <h4>current transactions</h4>
+        <p>enter a blockchain node url and click the view button to check current transactions</p>
+        <label>node url:</label>
+        <textarea id="node_url" rows="1" class="form-control">http://127.0.0.1:5000</textarea>
+        <br /><br />
+        <input type="button" onclick="view_transactions()" class="btn btn-primary btn-md" value="VIEW" />
+    </div>
+    <br /><br />
+    <div class="container">
+        <table id="transactions_table" class="table table-striped table-bordered" cellspacing="0" width="100%"></table>
+    </div>
+    <script src="/static/jquery/jquery-3.4.1.min.js"></script>
+    <script src="/static/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script type="text/javascript" src="/static/DataTables/datatables.min.js"></script>
+    <script src="/static/DataTables/ellipsis.js"></script>
+    <script type="text/javascript">
+        function view_transactions() {
+            $.ajax({
+                url: /*document.getElementById("node_url").value +*/ "/blockchain/chains",
+                type: "GET",
+                success: function (response) {
+                    var transactions = [];
+                    var count = 1;
+                    for (i = 1; i < response["length"]; i++) {
+                        for (j = 0; j < response["chains"][i]["transactions"].length; j++) {
+                            var transaction = [
+                                count,
+                                response["chains"][i]["transactions"][j]["sender"],
+                                response["chains"][i]["transactions"][j]["recipient"],
+                                response["chains"][i]["transactions"][j]["amount"],
+                                response["chains"][i]["timestamp"],
+                                response["chains"][i]["index"],
+                            ];
+                            transactions.push(transaction);
+                            count += 1;
+                        }
+                        console.log("---- 1111 ----");
+                    }
+                    $("#transactions_table").DataTable({
+                        data: transactions,
+                        columns: [
+                            { title: "#" },
+                            { title: "sender" },
+                            { title: "recipient" },
+                            { title: "amount" },
+                            { title: "timestamp" },
+                            { title: "index" },
+                        ],
+                        columnDefs: [{
+                            targets: [1, 2, 3, 4, 5],
+                            render: $.fn.dataTable.render.ellipsis(25),
+                        }],
+                    });
+                },
+                error: function (error) {
+                    document.write(error);
+                }
+            });
+        }
+    </script>
+{% else %}
+{% endif %}
+</body>
+</html>

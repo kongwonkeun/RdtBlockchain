@@ -1,0 +1,31 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>welcome to k-roller</title>
+    <link href="/static/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+</head>
+<body>
+{% include "./nav.html" %}
+{% if session['logged_in'] %}
+    <br />
+    <div class="container">
+        <h4>you({{user}}) are logged in</h4><br />
+        <a href="/user/generate_wallet">GENERATE WALLET</a><br />
+        <a href="/wallet/show">WALLET</a><br />
+        <a href="/mining">MINING</a><br />
+        <a href="/transaction">TRANSACTION</a><br />
+        <a href="/transaction/view">TRANSACTIONS LIST</a><br />
+    </div>
+{% else %}
+    <br />
+    <div class="container">
+        <h4>you are not login</h4><br />
+        <a href="/login">LOGIN</a><br />
+        <a href="/reg">REGISTER</a>
+    </div>
+{% endif %}
+</body>
+</html>

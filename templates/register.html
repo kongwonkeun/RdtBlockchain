@@ -1,0 +1,30 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>welcome to k-roller</title>
+    <link href="/static/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+</head>
+<body>
+{% include "./nav.html" %}
+{% if session['logged_in'] %}
+    <br />
+    <div class="container">
+        <h4>why this page is shown</h4>
+    </div>
+{% else %}
+    <br />
+    <div class="container">
+        <h4>register</h4>
+        <form action="/reg" method="POST">
+            <input type="text" name="username" placeholder="user name" /><br /><br />
+            <input type="password" name="password" placeholder="password" /><br /><br />
+            <input type="submit" value="REGISTER" />
+        </form>
+        <br />
+    </div>
+{% endif %}
+</body>
+</html>

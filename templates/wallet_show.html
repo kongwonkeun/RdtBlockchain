@@ -1,0 +1,24 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>welcome to k-roller</title>
+    <link rel="stylesheet" href="/static/bootstrap/css/bootstrap.min.css" />
+</head>
+<body>
+{% include "./nav.html" %}
+{% if session['logged_in'] %}
+    <br />
+    <div class="container">
+        <h4>your({{user}}) wallet information</h4><br />
+        <label>private key:</label>
+        <textarea name="pri_key" id="pri_key" rows="10" class="form-control" readonly>{{pri_key}}</textarea>
+        <label>public key:</label>
+        <textarea name="pub_key" id="pub_key" rows="5"  class="form-control" readonly>{{pub_key}}</textarea>
+    </div>
+{% else %}
+{% endif %}
+</body>
+</html>

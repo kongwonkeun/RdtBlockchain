@@ -1,0 +1,167 @@
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>799dfe70-bce3-4cd5-ad13-5aed2066cdc8</ProjectGuid>
+    <ProjectHome>.</ProjectHome>
+    <ProjectTypeGuids>{1b580a1a-fdb3-4b32-83e1-6407eb2722e6};{349c5851-65df-11da-9384-00065b846f21};{888888a0-9f3d-457c-b088-3a5042f75d52}</ProjectTypeGuids>
+    <StartupFile>Server.py</StartupFile>
+    <SearchPath>
+    </SearchPath>
+    <WorkingDirectory>.</WorkingDirectory>
+    <LaunchProvider>Web launcher</LaunchProvider>
+    <WebBrowserUrl>http://localhost</WebBrowserUrl>
+    <OutputPath>.</OutputPath>
+    <SuppressCollectPythonCloudServiceFiles>true</SuppressCollectPythonCloudServiceFiles>
+    <Name>RdtBlockchain</Name>
+    <RootNamespace>RdtBlockchain</RootNamespace>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <DebugSymbols>true</DebugSymbols>
+    <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <DebugSymbols>true</DebugSymbols>
+    <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
+  </PropertyGroup>
+  <ItemGroup>
+    <Folder Include="static\bootstrap\css\" />
+    <Folder Include="static\bootstrap\js\" />
+    <Folder Include="static\DataTables\DataTables-1.10.18\" />
+    <Folder Include="static\DataTables\DataTables-1.10.18\css\" />
+    <Folder Include="static\DataTables\DataTables-1.10.18\images\" />
+    <Folder Include="static\DataTables\DataTables-1.10.18\js\" />
+    <Folder Include="static\jquery\" />
+    <Folder Include="static\DataTables\" />
+    <Folder Include="static\bootstrap\" />
+    <Folder Include="templates\" />
+    <Folder Include="static\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Blockchain.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Server.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Transaction.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="__init__.py">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="static\bootstrap\css\bootstrap-grid.css" />
+    <Content Include="static\bootstrap\css\bootstrap-grid.css.map" />
+    <Content Include="static\bootstrap\css\bootstrap-grid.min.css" />
+    <Content Include="static\bootstrap\css\bootstrap-grid.min.css.map" />
+    <Content Include="static\bootstrap\css\bootstrap-reboot.css" />
+    <Content Include="static\bootstrap\css\bootstrap-reboot.css.map" />
+    <Content Include="static\bootstrap\css\bootstrap-reboot.min.css" />
+    <Content Include="static\bootstrap\css\bootstrap-reboot.min.css.map" />
+    <Content Include="static\bootstrap\css\bootstrap.css" />
+    <Content Include="static\bootstrap\css\bootstrap.css.map" />
+    <Content Include="static\bootstrap\css\bootstrap.min.css" />
+    <Content Include="static\bootstrap\css\bootstrap.min.css.map" />
+    <Content Include="static\bootstrap\js\bootstrap.bundle.js" />
+    <Content Include="static\bootstrap\js\bootstrap.bundle.js.map" />
+    <Content Include="static\bootstrap\js\bootstrap.bundle.min.js" />
+    <Content Include="static\bootstrap\js\bootstrap.bundle.min.js.map" />
+    <Content Include="static\bootstrap\js\bootstrap.js" />
+    <Content Include="static\bootstrap\js\bootstrap.js.map" />
+    <Content Include="static\bootstrap\js\bootstrap.min.js" />
+    <Content Include="static\bootstrap\js\bootstrap.min.js.map" />
+    <Content Include="static\DataTables\DataTables-1.10.18\css\dataTables.bootstrap.css" />
+    <Content Include="static\DataTables\DataTables-1.10.18\css\dataTables.bootstrap.min.css" />
+    <Content Include="static\DataTables\DataTables-1.10.18\css\dataTables.bootstrap4.css" />
+    <Content Include="static\DataTables\DataTables-1.10.18\css\dataTables.bootstrap4.min.css" />
+    <Content Include="static\DataTables\DataTables-1.10.18\css\dataTables.foundation.css" />
+    <Content Include="static\DataTables\DataTables-1.10.18\css\dataTables.foundation.min.css" />
+    <Content Include="static\DataTables\DataTables-1.10.18\css\dataTables.jqueryui.css" />
+    <Content Include="static\DataTables\DataTables-1.10.18\css\dataTables.jqueryui.min.css" />
+    <Content Include="static\DataTables\DataTables-1.10.18\css\dataTables.semanticui.css" />
+    <Content Include="static\DataTables\DataTables-1.10.18\css\dataTables.semanticui.min.css" />
+    <Content Include="static\DataTables\DataTables-1.10.18\css\jquery.dataTables.css" />
+    <Content Include="static\DataTables\DataTables-1.10.18\css\jquery.dataTables.min.css" />
+    <Content Include="static\DataTables\DataTables-1.10.18\images\sort_asc.png" />
+    <Content Include="static\DataTables\DataTables-1.10.18\images\sort_asc_disabled.png" />
+    <Content Include="static\DataTables\DataTables-1.10.18\images\sort_both.png" />
+    <Content Include="static\DataTables\DataTables-1.10.18\images\sort_desc.png" />
+    <Content Include="static\DataTables\DataTables-1.10.18\images\sort_desc_disabled.png" />
+    <Content Include="static\DataTables\DataTables-1.10.18\js\dataTables.bootstrap.js" />
+    <Content Include="static\DataTables\DataTables-1.10.18\js\dataTables.bootstrap.min.js" />
+    <Content Include="static\DataTables\DataTables-1.10.18\js\dataTables.bootstrap4.js" />
+    <Content Include="static\DataTables\DataTables-1.10.18\js\dataTables.bootstrap4.min.js" />
+    <Content Include="static\DataTables\DataTables-1.10.18\js\dataTables.foundation.js" />
+    <Content Include="static\DataTables\DataTables-1.10.18\js\dataTables.foundation.min.js" />
+    <Content Include="static\DataTables\DataTables-1.10.18\js\dataTables.jqueryui.js" />
+    <Content Include="static\DataTables\DataTables-1.10.18\js\dataTables.jqueryui.min.js" />
+    <Content Include="static\DataTables\DataTables-1.10.18\js\dataTables.semanticui.js" />
+    <Content Include="static\DataTables\DataTables-1.10.18\js\dataTables.semanticui.min.js" />
+    <Content Include="static\DataTables\DataTables-1.10.18\js\jquery.dataTables.js" />
+    <Content Include="static\DataTables\DataTables-1.10.18\js\jquery.dataTables.min.js" />
+    <Content Include="static\DataTables\datatables.css" />
+    <Content Include="static\DataTables\datatables.js" />
+    <Content Include="static\DataTables\datatables.min.css" />
+    <Content Include="static\DataTables\datatables.min.js" />
+    <Content Include="static\DataTables\ellipsis.js" />
+    <Content Include="static\jquery\jquery-3.4.1.js" />
+    <Content Include="static\jquery\jquery-3.4.1.min.js" />
+    <Content Include="static\jquery\jquery-3.4.1.min.map" />
+    <Content Include="static\jquery\jquery-3.4.1.slim.js" />
+    <Content Include="static\jquery\jquery-3.4.1.slim.min.js" />
+    <Content Include="static\jquery\jquery-3.4.1.slim.min.map" />
+    <Content Include="templates\nav.html" />
+    <Content Include="templates\index.html" />
+    <Content Include="templates\login.html" />
+    <Content Include="templates\mining.html" />
+    <Content Include="templates\register.html" />
+    <Content Include="templates\transaction.html" />
+    <Content Include="templates\transaction_make.html" />
+    <Content Include="templates\transaction_view.html" />
+    <Content Include="templates\wallet_generate.html" />
+    <Content Include="templates\wallet_show.html" />
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.Web.targets" />
+  <!-- Specify pre- and post-build commands in the BeforeBuild and 
+       AfterBuild targets below. -->
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <AutoAssignPort>True</AutoAssignPort>
+          <UseCustomServer>True</UseCustomServer>
+          <CustomServerUrl>http://localhost</CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}" User="">
+        <WebProjectProperties>
+          <StartPageUrl>
+          </StartPageUrl>
+          <StartAction>CurrentPage</StartAction>
+          <AspNetDebugging>True</AspNetDebugging>
+          <SilverlightDebugging>False</SilverlightDebugging>
+          <NativeDebugging>False</NativeDebugging>
+          <SQLDebugging>False</SQLDebugging>
+          <ExternalProgram>
+          </ExternalProgram>
+          <StartExternalURL>
+          </StartExternalURL>
+          <StartCmdLineArguments>
+          </StartCmdLineArguments>
+          <StartWorkingDirectory>
+          </StartWorkingDirectory>
+          <EnableENC>False</EnableENC>
+          <AlwaysStartWebServerOnDebug>False</AlwaysStartWebServerOnDebug>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+</Project>
