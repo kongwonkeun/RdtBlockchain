@@ -23,8 +23,7 @@
             <input type="text" name="recipient" id="recipient" rows="2" class="form-control" />
             <label>amount:</label>
             <input type="text" name="amount" id="amount" rows="2" class="form-control" />
-        </form>
-        <br /><br />
+        </form><br /><br />
         <input type="button" onclick="generate_transaction()" class="btn btn-primary btn-md" value="TRANSACTION" />
     </div>
 
@@ -90,13 +89,11 @@
                 dataType: "json",
                 data: $("#transaction_form").serialize(),
                 success: function (response) {
-                    console.log("---- 2222 ----");
                     document.getElementById("confirm_sender").value = response["transaction"]["sender"];
                     document.getElementById("confirm_recipient").value = response["transaction"]["recipient"];
                     document.getElementById("confirm_amount").value = response["transaction"]["amount"];
                     document.getElementById("confirm_signature").value = response["signature"];
                     $("#request_trans_modal").modal("show");
-                    console.log("---- 3333 ----");
                 },
                 error: function (error) {
                     document.write(error);
@@ -111,7 +108,6 @@
                 dataType: "json",
                 data: $("#confirm_transaction_form").serialize(),
                 success: function (response) {
-                    console.log("---- 4444 ----");
                     $("#transaction_form")[0].reset();
                     $("#confirm_transaction_form")[0].reset();
                     $("#sender").val("");
@@ -120,7 +116,6 @@
                     $("#amount").val("");
                     $("#request_trans_modal").modal("hide");
                     $("#success_trans_modal").modal("show");
-                    console.log("---- 5555 ----");
                 },
                 error: function (error) {
                     document.write(error);

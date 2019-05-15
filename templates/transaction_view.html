@@ -16,17 +16,16 @@
         <h4>current transactions</h4>
         <p>enter a blockchain node url and click the view button to check current transactions</p>
         <label>node url:</label>
-        <textarea id="node_url" rows="1" class="form-control">http://127.0.0.1:5000</textarea>
-        <br /><br />
+        <textarea id="node_url" rows="1" class="form-control">http://127.0.0.1:5000</textarea><br /><br />
         <input type="button" onclick="view_transactions()" class="btn btn-primary btn-md" value="VIEW" />
-    </div>
-    <br /><br />
+    </div><br />
+    <br />
     <div class="container">
         <table id="transactions_table" class="table table-striped table-bordered" cellspacing="0" width="100%"></table>
     </div>
     <script src="/static/jquery/jquery-3.4.1.min.js"></script>
     <script src="/static/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script type="text/javascript" src="/static/DataTables/datatables.min.js"></script>
+    <script src="/static/DataTables/datatables.min.js"></script>
     <script src="/static/DataTables/ellipsis.js"></script>
     <script type="text/javascript">
         function view_transactions() {
@@ -49,7 +48,6 @@
                             transactions.push(transaction);
                             count += 1;
                         }
-                        console.log("---- 1111 ----");
                     }
                     $("#transactions_table").DataTable({
                         data: transactions,

@@ -46,7 +46,6 @@ class Blockchain(object):
         index = 1
         while index < len(chains):
             block = chains[index]
-            #print(f'{last_block}')
             #print(f'{block}')
             if block['previous_hash'] != self.generateHash(last_block):
                 return False

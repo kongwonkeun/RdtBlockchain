@@ -5,7 +5,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>welcome to k-roller</title>
-    <link href="/static/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="/static/bootstrap/css/bootstrap.min.css" />
 </head>
 <body>
 {% include "./nav.html" %}
@@ -34,8 +34,7 @@
 {% else %}
     <br />
     <div class="container">
-        <h4>you must login to make a transaction</h4>
-        <br />
+        <h4>you must login to make a transaction</h4><br />
         <a href="/login">LOGIN</a>
     </div>
 {% endif %}

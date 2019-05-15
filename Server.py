@@ -37,7 +37,7 @@ m_blockchain = Blockchain()
 #
 #   /
 #
-@m_app.route('/', methods = ['GET'])
+@m_app.route('/')
 def home():
     user_name = request.cookies.get('MY_USER')
     if not session.get('logged_in'):
@@ -103,6 +103,27 @@ def transaction():
     return render_template('./transaction.html', user = user_name)
 
 #
+#   /user/users
+#
+@m_app.route('/user/users')
+def users():
+    user_all = User.getUsers()
+    users = []
+    for x in user_all:
+        user = {
+            'id': x.u_id,
+            'name': x.u_name,
+            'password': x.u_password,
+            'private_key': x.u_private_key,
+            'public_key': x.u_public_key,
+            'coin': x.u_coin,
+        }
+        users.append(user)
+    size = len(users)
+    data = json.loads(json.dumps(users))
+    return render_template('./users.html', data = data, size = size)
+
+#
 #   /user/generate_wallet
 #
 @m_app.route('/user/generate_wallet')
@@ -147,7 +168,7 @@ def viewTransaction():
 #
 #   /transaction/transactions
 #
-@m_app.route('/transaction/transactions', methods = ['GET'])
+@m_app.route('/transaction/transactions')
 def getTransaction():
     transactions = m_blockchain.transactions
     response = {
@@ -158,7 +179,7 @@ def getTransaction():
 #
 #   /wallet/generate
 #
-@m_app.route('/wallet/generate', methods = ['GET'])
+@m_app.route('/wallet/generate')
 def generateWallet():
     random_num = Crypto.Random.new().read
     private_key = RSA.generate(1024, random_num)
@@ -175,9 +196,6 @@ def generateWallet():
 @m_app.route('/wallet/save', methods = ['POST'])
 def saveWallet():
     values = request.form
-    #print(values['user_name'])
-    #print(values['pri_key'])
-    #print(values['pub_key'])
     User.registerWallet(values['user_name'], values['pri_key'], values['pub_key'])
     response = {
         'return': True
@@ -191,8 +209,6 @@ def saveWallet():
 def showWallet(user_name):
     private_key = User.getPrivateKey(user_name)
     public_key = User.getPublicKey(user_name)
-    #print(private_key)
-    #print(public_key)
     return render_template('./wallet_show.html', user = user_name, pri_key = private_key, pub_key = public_key)
 
 #
@@ -203,8 +219,6 @@ def showWallet_():
     user_name = request.cookies.get('MY_USER')
     private_key = User.getPrivateKey(user_name)
     public_key = User.getPublicKey(user_name)
-    #print(private_key)
-    #print(public_key)
     return render_template('./wallet_show.html', user = user_name, pri_key = private_key, pub_key = public_key)
 
 #
@@ -216,7 +230,6 @@ def mine():
         miner = m_id
     else:
         miner = User.getPublicKey(request.form['user_name'])
-    #print(miner)
     last_block = m_blockchain.chains[-1]
     nonce = m_blockchain.solveProofOfWork()
     m_blockchain.createNewTransaction(
@@ -260,7 +273,7 @@ def createNewTransaction():
 #
 #   /blockchain/chains
 #
-@m_app.route('/blockchain/chains', methods = ['GET'])
+@m_app.route('/blockchain/chains')
 def getFullChain():
     response = {
         'chains': m_blockchain.chains,
@@ -271,7 +284,7 @@ def getFullChain():
 #
 #   /blockchain/resolve
 #
-@m_app.route('/blockchain/resolve', methods = ['GET'])
+@m_app.route('/blockchain/resolve')
 def resolve():
     replaced = m_blockchain.resolveConflicts()
     if replaced:
@@ -294,7 +307,7 @@ def registerNodes():
     values = request.get_json()
     nodes = values.get('nodes')
     if nodes is None:
-        return "error: please supply a valid list of nodes", 400
+        return 'error: please supply a valid list of nodes', 400
     for node in nodes:
         m_blockchain.registerNode(node)
     response = {
@@ -306,7 +319,7 @@ def registerNodes():
 #
 #   /node/nodes
 #
-@m_app.route('/node/nodes', methods = ['GET'])
+@m_app.route('/node/nodes')
 def getFullNode():
     nodes = list(m_blockchain.nodes)
     response = {
@@ -378,6 +391,10 @@ class User(m_db.Model):
     def getPublicKey(cls, name):
         data = User.query.filter_by(u_name = name).first()
         return data.u_public_key
+
+    @classmethod
+    def getUsers(cls):
+        return User.query.all()
 
     @classmethod
     def test(cls):
