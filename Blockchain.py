@@ -4,6 +4,8 @@
 from collections import OrderedDict
 import hashlib
 import json
+import pickle
+from datetime import datetime
 from time import time
 from urllib.parse import urlparse
 from uuid import uuid4
@@ -21,6 +23,7 @@ import requests
 MINING_SENDER = 'BLOCKCHAIN'
 MINING_REWARD = 1
 MINING_DIFFICULTY = 2
+MINING_BLOCK_SAVE_SIZE = 10000
 
 class Blockchain(object):
     
@@ -85,6 +88,17 @@ class Blockchain(object):
         }
         self.transactions = []
         self.chains.append(block)
+        #---- kong ----
+        s = len(self.chains)
+        r = s % MINING_BLOCK_SAVE_SIZE
+        if  s > MINING_BLOCK_SAVE_SIZE and r == 1:
+            b = self.chains[0:s-1]
+            c = datetime.now()
+            n = c.strftime('%Y%m%d%H%M') + '.blockchain'
+            with open(n, 'wb') as f:
+                pickle.dump(b, f)
+            del(self.chains[0:s-1])
+        #----
         return block
 
     def verifyTransactionSignature(self, sender, signature, transaction):

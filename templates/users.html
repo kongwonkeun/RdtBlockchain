@@ -32,10 +32,11 @@
             var users = [];
             for (var i = 0; i < "{{size}}"; i++) {
                 var x = j[i];
+                var password = "*".repeat(x.password.length);
                 user = [
                     x.id,
                     x.name,
-                    x.password,
+                    password,
                     x.private_key,
                     x.public_key,
                     x.coin,

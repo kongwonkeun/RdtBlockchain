@@ -121,6 +121,7 @@
     <Content Include="templates\transaction.html" />
     <Content Include="templates\transaction_make.html" />
     <Content Include="templates\transaction_view.html" />
+    <Content Include="templates\unregister.html" />
     <Content Include="templates\users.html" />
     <Content Include="templates\wallet_generate.html" />
     <Content Include="templates\wallet_show.html" />

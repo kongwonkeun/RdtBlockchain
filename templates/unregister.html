@@ -15,30 +15,27 @@
         {% if data %}
         <h4>{{data}}</h4><br />
         {% endif %}
-        <h4>transaction</h4><br />
-        <form action="/transaction/make" method="POST">
-            <label>sender:</label><br />
-            <input type="text" name="sender" id="sender" /><br /><br />
-            <label>recipient:</label><br />
-            <input type="text" name="recipient" id="recipient" /><br /><br />
-            <label>amount:</label><br />
-            <input type="text" name="amount" id="amount" /><br /><br />
-            <input type="submit" value="TRANSACTION" />
-        </form>
+        <h4>do you({{user}}) want to unregister</h4><br />
+        <form action="/unreg" method="POST">
+            <label>user:</label><br />
+            <input type="text" name="user" id="user" /><br /><br />
+            <label>password:</label><br />
+            <input type="password" name="password" id="password" /><br /><br />
+            <input type="submit" value="UNREGISTER" />
+        </form><br />
     </div>
 
     <script src="/static/jquery/jquery-3.4.1.min.js"></script>
     <script src="/static/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script type="text/javascript">
         $(document).ready(function () {
-            $("#sender").val("{{user}}");
-            $("#amount").val("0");
+            $("#user").val("{{user}}");
         });
     </script>
 {% else %}
     <br />
     <div class="container">
-        <h4>you must login to make a transaction</h4><br />
+        <h4>you must login to unregister</h4><br />
         <a href="/login">LOGIN</a>
     </div>
 {% endif %}

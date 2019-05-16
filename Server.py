@@ -87,6 +87,24 @@ def register():
     return render_template('./register.html')
 
 #
+#   /unreg
+#
+@m_app.route('/unreg', methods = ['GET', 'POST'])
+def unregister():
+    user_name = request.cookies.get('MY_USER')
+    if request.method == 'POST':
+        name = request.form['user']
+        password = request.form['password']
+        if User.unregisterUser(name, password) == True:
+            session['logged_in'] = False
+            response = make_response(render_template('./index.html'))
+            response.delete_cookie('MY_USER')
+            return response
+        else:
+            return render_template('./unregister.html', user = user_name, data = 'user and password are mismatched, try again')
+    return render_template('./unregister.html', user = user_name)
+
+#
 #   /mining
 #
 @m_app.route('/mining')
@@ -101,6 +119,16 @@ def mining():
 def transaction():
     user_name = request.cookies.get('MY_USER')
     return render_template('./transaction.html', user = user_name)
+
+@m_app.route('/transaction/1')
+def transaction_1():
+    user_name = request.cookies.get('MY_USER')
+    return render_template('./transaction.html', user = user_name, data = 'there are missing values, retry')
+
+@m_app.route('/transaction/2')
+def transaction_2():
+    user_name = request.cookies.get('MY_USER')
+    return render_template('./transaction.html', user = user_name, data = 'sender needs more coins')
 
 #
 #   /user/users
@@ -152,10 +180,15 @@ def generateTransaction():
 #
 @m_app.route('/transaction/make', methods = ['POST'])
 def makeTransaction():
+    user_name = request.cookies.get('MY_USER')
     sender = User.getPublicKey(request.form['sender'])
     sender_key = User.getPrivateKey(request.form['sender'])
     recipient = User.getPublicKey(request.form['recipient'])
     amount = request.form['amount']
+    if sender == False or sender_key == False or recipient == False:
+        return render_template('./transaction.html', user = user_name, data = 'sender or recipient has no wallet, make one and retry')
+    if int(amount) < 1:
+        return render_template('./transaction.html', user = user_name, data = 'amount must be larger than 1')
     return render_template('./transaction_make.html', sender = sender, sender_key = sender_key, recipient = recipient, amount = amount)
 
 #
@@ -230,6 +263,8 @@ def mine():
         miner = m_id
     else:
         miner = User.getPublicKey(request.form['user_name'])
+    User.addCoins(miner, MINING_REWARD)
+
     last_block = m_blockchain.chains[-1]
     nonce = m_blockchain.solveProofOfWork()
     m_blockchain.createNewTransaction(
@@ -263,10 +298,28 @@ def createNewTransaction():
         'signature',
     ]
     if not all(k in values for k in required):
-        return 'missing values', 400
-    index = m_blockchain.createNewTransaction(values['sender'], values['recipient'], values['amount'], values['signature']) #---- create now transaction
+        response = {
+            'message': 'missing values',
+            'code': '1',
+        }
+        return jsonify(response), 200
+    if not User.removeCoins(values['sender'], int(values['amount'])):
+        response = {
+            'message': 'senser must have more coins',
+            'code': '2',
+        }
+        return jsonify(response), 200
+
+    User.addCoins(values['recipient'], int(values['amount']))
+    index = m_blockchain.createNewTransaction( #---- create now transaction
+        values['sender'], 
+        values['recipient'], 
+        values['amount'], 
+        values['signature'],
+    ) 
     response = {
         'message': f'transaction will be added to block {index}',
+        'code': '0'
     }
     return jsonify(response), 201
 
@@ -290,7 +343,7 @@ def resolve():
     if replaced:
         response = {
             'message': 'our chain was replaced',
-            'new_chains': m_blockchain.chains,
+            'chains': m_blockchain.chains,
         }
     else:
         response = {
@@ -330,6 +383,9 @@ def getFullNode():
 #
 #   DATABASE TABLE
 #
+
+USER_NO_KEY = '0'
+
 class User(m_db.Model):
 
     u_id = m_db.Column(m_db.Integer, primary_key = True)
@@ -342,6 +398,8 @@ class User(m_db.Model):
     def __init__(self, name, password):
         self.u_name = name
         self.u_password = password
+        self.u_private_key = USER_NO_KEY
+        self.u_public_key = USER_NO_KEY
         self.u_coin = 0
         return
     
@@ -363,12 +421,25 @@ class User(m_db.Model):
         return False
 
     @classmethod
+    def unregisterUser(cls, name, password):
+        data = User.query.filter_by(u_name = name).first()
+        if data is not None:
+            if data.u_password != password:
+                return False
+            m_db.session.delete(data)
+            m_db.session.commit()
+            return True
+        return False
+
+    @classmethod
     def registerWallet(cls, name, private_key, public_key):
         data = User.query.filter_by(u_name = name).first()
-        data.u_private_key = private_key
-        data.u_public_key = public_key
-        m_db.session.commit()
-        return True
+        if data is not None:
+            data.u_private_key = private_key
+            data.u_public_key = public_key
+            m_db.session.commit()
+            return True
+        return False
     
     @classmethod
     def registerNode(cls):
@@ -385,16 +456,44 @@ class User(m_db.Model):
     @classmethod
     def getPrivateKey(cls, name):
         data = User.query.filter_by(u_name = name).first()
-        return data.u_private_key
+        if data is not None:
+            if data.u_private_key == USER_NO_KEY:
+                return False
+            return data.u_private_key
+        return False
 
     @classmethod
     def getPublicKey(cls, name):
         data = User.query.filter_by(u_name = name).first()
-        return data.u_public_key
+        if data is not None:
+            if data.u_public_key == USER_NO_KEY:
+                return False
+            return data.u_public_key
+        return False
 
     @classmethod
     def getUsers(cls):
         return User.query.all()
+
+    @classmethod
+    def addCoins(cls, recipient, amount):
+        data = User.query.filter_by(u_public_key = recipient).first()
+        if data is not None:
+            data.u_coin += amount
+            m_db.session.commit()
+            return True
+        return False
+
+    @classmethod
+    def removeCoins(cls, sender, amount):
+        data = User.query.filter_by(u_public_key = sender).first()
+        if data is not None:
+            if data.u_coin < amount:
+                return False
+            data.u_coin -= amount
+            m_db.session.commit()
+            return True
+        return False
 
     @classmethod
     def test(cls):
