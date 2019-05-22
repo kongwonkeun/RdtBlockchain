@@ -21,7 +21,7 @@ from flask_sqlalchemy import SQLAlchemy
 from Blockchain import Blockchain, MINING_SENDER, MINING_REWARD
 from Transaction import Transaction
 
-m_app = Flask(__name__) #---- instantiate node
+m_app = Flask(__name__)
 m_app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///rdtone.db'
 m_app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 m_db = SQLAlchemy(m_app)
@@ -36,6 +36,7 @@ m_blockchain = Blockchain()
 
 #
 #   /
+#   /rest --> REST interface
 #
 @m_app.route('/')
 def home():
@@ -44,8 +45,16 @@ def home():
         return render_template('./index.html')
     return render_template('./index.html', user = user_name)
 
+@m_app.route('/rest')
+def home_rest():
+    response = {
+        'rcode': 'ok',
+    }
+    return jsonify(response), 200
+
 #
 #   /login
+#   /login/rest --> REST interface
 #
 @m_app.route('/login', methods = ['GET', 'POST'])
 def login():
@@ -62,8 +71,24 @@ def login():
             return response
     return render_template('./login.html', data = 'you are not allowed to login')
 
+@m_app.route('/login/rest', methods = ['POST'])
+def login_rest():
+    name = request.form['username']
+    password = request.form['password']
+    if User.isValidUser(name, password) == True:
+        session['logged_in'] = True
+        response = {
+            'rcode': 'ok',
+        }
+        return jsonify(response), 200
+    response = {
+        'rcode': 'nok',
+    }
+    return jsonify(response), 200
+
 #
 #   /logout
+#   /logout/rest --> REST interface
 #
 @m_app.route('/logout')
 def logout():
@@ -72,8 +97,17 @@ def logout():
     response.delete_cookie('MY_USER')
     return response
 
+@m_app.route('/logout/rest')
+def logout_rest():
+    session['logged_in'] = False
+    response = {
+        'rcode': 'ok',
+    }
+    return jsonify(response), 200
+
 #
 #   /reg
+#   /reg/rest --> REST interface
 #
 @m_app.route('/reg', methods = ['GET', 'POST'])
 def register():
@@ -86,14 +120,30 @@ def register():
             return render_template('./login.html', data = 'you are already restered')
     return render_template('./register.html')
 
+@m_app.route('/reg/rest', methods = ['POST'])
+def register_rest():
+    name = request.form['username']
+    password = request.form['password']
+    if User.registerUser(name, password) == True:
+        response = {
+            'rcode': 'ok',
+        }
+        return jsonify(response), 200
+    response = {
+        'rcode': 'nok',
+        'rmessage': 'you are already registered'
+    }
+    return jsonify(response), 200
+
 #
 #   /unreg
+#   /unreg/rest --> REST interface
 #
 @m_app.route('/unreg', methods = ['GET', 'POST'])
 def unregister():
     user_name = request.cookies.get('MY_USER')
     if request.method == 'POST':
-        name = request.form['user']
+        name = request.form['username']
         password = request.form['password']
         if User.unregisterUser(name, password) == True:
             session['logged_in'] = False
@@ -103,6 +153,22 @@ def unregister():
         else:
             return render_template('./unregister.html', user = user_name, data = 'user and password are mismatched, try again')
     return render_template('./unregister.html', user = user_name)
+
+@m_app.route('/unreg/rest', methods = ['POST'])
+def unregister_rest():
+    name = request.form['username']
+    password = request.form['password']
+    if User.unregisterUser(name, password) == True:
+        session['logged_in'] = False
+        response = {
+            'rcode': 'ok',
+        }
+        return jsonify(response), 200
+    response = {
+        'rcode': 'nok',
+        'rmessage': 'user and password are mismatched',
+    }
+    return jsonify(response), 200
 
 #
 #   /mining
@@ -132,6 +198,7 @@ def transaction_2():
 
 #
 #   /user/users
+#   /user/users/rest --> REST interface
 #
 @m_app.route('/user/users')
 def users():
@@ -151,6 +218,28 @@ def users():
     data = json.loads(json.dumps(users))
     return render_template('./users.html', data = data, size = size)
 
+@m_app.route('/user/users/rest')
+def users_rest():
+    user_all = User.getUsers()
+    users = []
+    for x in user_all:
+        user = {
+            'id': x.u_id,
+            'name': x.u_name,
+            'password': x.u_password,
+            'private_key': x.u_private_key,
+            'public_key': x.u_public_key,
+            'coin': x.u_coin,
+        }
+        users.append(user)
+    size = len(users)
+    data = json.loads(json.dumps(users))
+    response = {
+        'rcode': 'ok',
+        'rdata': data,
+    }
+    return jsonify(response), 200
+
 #
 #   /user/generate_wallet
 #
@@ -161,6 +250,7 @@ def genUserWallet():
 
 #
 #   /transaction/generate
+#   /transaction/generate/rest --> REST interface
 #
 @m_app.route('/transaction/generate', methods = ['POST'])
 def generateTransaction():
@@ -175,6 +265,39 @@ def generateTransaction():
     }
     return jsonify(response), 200
 
+@m_app.route('/transaction/generate/rest', methods = ['POST'])
+def generateTransaction_rest():
+    sender = User.getPublicKey(request.form['sender'])
+    sender_key = User.getPrivateKey(request.form['sender'])
+    recipient = User.getPublicKey(request.form['recipient'])
+    amount = request.form['amount']
+    if sender == False or sender_key == False or recipient == False:
+        response = {
+            'rcode': 'nok',
+            'rmessage': 'sender or recipient has no wallet',
+        }
+        return jsonify(response), 200
+    if sender == USER_NO_KEY or sender_key == USER_NO_KEY or recipient == USER_NO_KEY:
+        response = {
+            'rcode': 'nok',
+            'rmessage': 'sender or recipient has no wallet',
+        }
+        return jsonify(response), 200
+    if int(amount) < 1:
+        response = {
+            'rcode': 'nok',
+            'rmessage': 'amount must be larger than 1',
+        }
+        return jsonify(response), 200
+
+    transaction = Transaction(sender, sender_key, recipient, amount)
+    response = {
+        'rcode': 'ok',
+        'rtransact': transaction.makeDict(),
+        'rsign': transaction.signTransaction(),
+    }
+    return jsonify(response), 200
+
 #
 #   /transaction/make
 #
@@ -186,6 +309,8 @@ def makeTransaction():
     recipient = User.getPublicKey(request.form['recipient'])
     amount = request.form['amount']
     if sender == False or sender_key == False or recipient == False:
+        return render_template('./transaction.html', user = user_name, data = 'sender or recipient has no wallet, make one and retry')
+    if sender == USER_NO_KEY or sender_key == USER_NO_KEY or recipient == USER_NO_KEY:
         return render_template('./transaction.html', user = user_name, data = 'sender or recipient has no wallet, make one and retry')
     if int(amount) < 1:
         return render_template('./transaction.html', user = user_name, data = 'amount must be larger than 1')
@@ -211,6 +336,7 @@ def getTransaction():
 
 #
 #   /wallet/generate
+#   /wallet/generate/rest --> REST interface
 #
 @m_app.route('/wallet/generate')
 def generateWallet():
@@ -223,8 +349,21 @@ def generateWallet():
     }
     return jsonify(response), 200
 
+@m_app.route('/wallet/generate/rest')
+def generateWallet_rest():
+    random_num = Crypto.Random.new().read
+    private_key = RSA.generate(1024, random_num)
+    public_key = private_key.publickey()
+    response = {
+        'rcode': 'ok',
+        'rpri_key': binascii.hexlify(private_key.exportKey(format = 'DER')).decode('ascii'),
+        'rpub_key': binascii.hexlify(public_key.exportKey(format = 'DER')).decode('ascii'),
+    }
+    return jsonify(response), 200
+
 #
 #   /wallet/save
+#   /wallet/save/rest --> REST interface
 #
 @m_app.route('/wallet/save', methods = ['POST'])
 def saveWallet():
@@ -232,6 +371,15 @@ def saveWallet():
     User.registerWallet(values['user_name'], values['pri_key'], values['pub_key'])
     response = {
         'return': True
+    }
+    return jsonify(response), 200
+
+@m_app.route('/wallet/save/rest', methods = ['POST'])
+def saveWallet_rest():
+    values = request.form
+    User.registerWallet(values['user_name'], values['pri_key'], values['pub_key'])
+    response = {
+        'rcode': 'ok',
     }
     return jsonify(response), 200
 
@@ -246,6 +394,7 @@ def showWallet(user_name):
 
 #
 #   /wallet/show
+#   /wallet/show/rest --> REST interface
 #
 @m_app.route('/wallet/show')
 def showWallet_():
@@ -254,16 +403,33 @@ def showWallet_():
     public_key = User.getPublicKey(user_name)
     return render_template('./wallet_show.html', user = user_name, pri_key = private_key, pub_key = public_key)
 
+@m_app.route('/wallet/show/rest', methods = ['POST'])
+def showWallet_rest():
+    user_name = request.form['username']
+    private_key = User.getPrivateKey(user_name)
+    public_key = User.getPublicKey(user_name)
+    response = {
+        'rcode': 'ok',
+        'rpri_key': private_key,
+        'rpub_key': public_key,
+    }
+    return jsonify(response), 200
+
 #
 #   /blockchain/mine
+#   /blockchain/mine/rest --> REST interface
 #
 @m_app.route('/blockchain/mine', methods = ['GET', 'POST'])
 def mine():
     if request.method == 'GET':
         miner = m_id
     else:
-        miner = User.getPublicKey(request.form['user_name'])
-    User.addCoins(miner, MINING_REWARD)
+        miner = User.getPublicKey(request.form['username'])
+
+    if miner == USER_NO_KEY:
+        User.addCoinsToUser(request.form['username'], MINING_REWARD)
+    else:
+        User.addCoins(miner, MINING_REWARD)
 
     last_block = m_blockchain.chains[-1]
     nonce = m_blockchain.solveProofOfWork()
@@ -271,12 +437,12 @@ def mine():
         sender = MINING_SENDER,
         recipient = miner,
         amount = MINING_REWARD,
-        signature = "",
+        signature = '',
     )
     previous_hash = m_blockchain.generateHash(last_block)
     block = m_blockchain.createNewBlock(nonce, previous_hash)
     response = {
-        'message': 'new block forged',
+        'message': 'new block generated',
         'index': block['index'],
         'timestamp': block['timestamp'],
         'transactions': block['transactions'],
@@ -285,8 +451,33 @@ def mine():
     }
     return jsonify(response), 200
 
+@m_app.route('/blockchain/mine/rest', methods = ['POST'])
+def mine_rest():
+    miner = User.getPublicKey(request.form['username'])
+
+    if miner == USER_NO_KEY:
+        User.addCoinsToUser(request.form['username'], MINING_REWARD)
+    else:
+        User.addCoins(miner, MINING_REWARD)
+
+    last_block = m_blockchain.chains[-1]
+    nonce = m_blockchain.solveProofOfWork()
+    m_blockchain.createNewTransaction(
+        sender = MINING_SENDER,
+        recipient = miner,
+        amount = MINING_REWARD,
+        signature = '',
+    )
+    previous_hash = m_blockchain.generateHash(last_block)
+    block = m_blockchain.createNewBlock(nonce, previous_hash)
+    response = {
+        'rcode': 'ok',
+        'rmessage': 'new block generated',
+    }
+    return jsonify(response), 200
 #
 #   /blockchain/transact
+#   /blockchain/transact/rest --> REST interface
 #
 @m_app.route('/blockchain/transact', methods = ['POST'])
 def createNewTransaction():
@@ -320,6 +511,41 @@ def createNewTransaction():
     response = {
         'message': f'transaction will be added to block {index}',
         'code': '0'
+    }
+    return jsonify(response), 201
+
+@m_app.route('/blockchain/transact/rest', methods = ['POST'])
+def createNewTransaction_rest():
+    values = request.form
+    required = [
+        'sender', 
+        'recipient', 
+        'amount',
+        'signature',
+    ]
+    if not all(k in values for k in required):
+        response = {
+            'rcode': 'nok',
+            'rmessage': 'missing values',
+        }
+        return jsonify(response), 200
+    if not User.removeCoins(values['sender'], int(values['amount'])):
+        response = {
+            'rcode': 'nok',
+            'rmessage': 'senser must have more coins',
+        }
+        return jsonify(response), 200
+
+    User.addCoins(values['recipient'], int(values['amount']))
+    index = m_blockchain.createNewTransaction( #---- create now transaction
+        values['sender'], 
+        values['recipient'], 
+        values['amount'], 
+        values['signature'],
+    ) 
+    response = {
+        'rcode': 'ok',
+        'rmessage': f'transaction will be added to block {index}',
     }
     return jsonify(response), 201
 
@@ -384,7 +610,7 @@ def getFullNode():
 #   DATABASE TABLE
 #
 
-USER_NO_KEY = '0'
+USER_NO_KEY = 'none'
 
 class User(m_db.Model):
 
@@ -457,8 +683,6 @@ class User(m_db.Model):
     def getPrivateKey(cls, name):
         data = User.query.filter_by(u_name = name).first()
         if data is not None:
-            if data.u_private_key == USER_NO_KEY:
-                return False
             return data.u_private_key
         return False
 
@@ -466,14 +690,21 @@ class User(m_db.Model):
     def getPublicKey(cls, name):
         data = User.query.filter_by(u_name = name).first()
         if data is not None:
-            if data.u_public_key == USER_NO_KEY:
-                return False
             return data.u_public_key
         return False
 
     @classmethod
     def getUsers(cls):
         return User.query.all()
+
+    @classmethod
+    def addCoinsToUser(cls, user, amount):
+        data = User.query.filter_by(u_name = user).first()
+        if data is not None:
+            data.u_coin += amount
+            m_db.session.commit()
+            return True
+        return False
 
     @classmethod
     def addCoins(cls, recipient, amount):

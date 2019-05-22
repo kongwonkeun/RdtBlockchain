@@ -37,7 +37,7 @@
                 url: "/blockchain/mine",
                 type: "POST",
                 datatype: "json",
-                data: "user_name={{user}}",
+                data: "username={{user}}",
                 success: function (response) {
                     transaction = response["transactions"].pop();
                     document.getElementById("index").value = response["index"];
