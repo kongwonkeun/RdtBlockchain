@@ -233,7 +233,9 @@ def users_rest():
         }
         users.append(user)
     size = len(users)
-    data = json.loads(json.dumps(users))
+    #---- kong ---- data = json.loads(json.dumps(users))
+    data = json.dumps(users)
+    #----
     response = {
         'rcode': 'ok',
         'rdata': data,
