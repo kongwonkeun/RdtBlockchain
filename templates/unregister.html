@@ -6,25 +6,34 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>welcome to k-roller</title>
     <link rel="stylesheet" href="/static/bootstrap/css/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="/static/public/css/RDT_style.css" />
 </head>
 <body>
-{% include "./nav.html" %}
-{% if session['logged_in'] %}
-    <br />
-    <div class="container">
-        {% if data %}
-        <h4>{{data}}</h4><br />
-        {% endif %}
-        <h4>do you({{user}}) want to unregister</h4><br />
-        <form action="/unreg" method="POST">
-            <label>user:</label><br />
-            <input type="text" name="username" id="username" /><br /><br />
-            <label>password:</label><br />
-            <input type="password" name="password" id="password" /><br /><br />
-            <input type="submit" value="UNREGISTER" />
-        </form><br />
+    <div class="bg">
+        {% include "./nav.html" %}
+    {% if session['logged_in'] %}
+        <br />
+        <div class="container">
+            {% if data %}
+            <h4>{{data}}</h4><br />
+            {% endif %}
+            <h4>do you({{user}}) want to unregister</h4><br />
+            <form action="/unreg" method="POST">
+                <label>user:</label><br />
+                <input type="text" name="username" id="username" /><br /><br />
+                <label>password:</label><br />
+                <input type="password" name="password" id="password" /><br /><br />
+                <input class="btn-rdt" type="submit" value="UNREGISTER" />
+            </form><br />
+        </div>
+    {% else %}
+        <br />
+        <div class="container">
+            <h4>you must login to unregister</h4><br />
+            <a href="/login">LOGIN</a>
+        </div>
+    {% endif %}
     </div>
-
     <script src="/static/jquery/jquery-3.4.1.min.js"></script>
     <script src="/static/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script type="text/javascript">
@@ -32,12 +41,5 @@
             $("#user").val("{{user}}");
         });
     </script>
-{% else %}
-    <br />
-    <div class="container">
-        <h4>you must login to unregister</h4><br />
-        <a href="/login">LOGIN</a>
-    </div>
-{% endif %}
 </body>
 </html>

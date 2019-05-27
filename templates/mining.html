@@ -6,29 +6,35 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>welcome to k-roller</title>
     <link rel="stylesheet" href="/static/bootstrap/css/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="/static/public/css/RDT_style.css" />
 </head>
 <body>
-{% include "./nav.html" %}
-{% if session['logged_in'] %}
-    <br />
-    <div class="container">
-        <h4>mining with your({{user}}) wallet</h4><br />
-        <input type="button" onclick="mine()" class="btn btn-primary btn-md" value="MINE" /><br />
+    <div class="bg">
+        {% include "./nav.html" %}
+    {% if session['logged_in'] %}
+        <br />
+        <div class="container">
+            <h4>mining with your({{user}}) wallet</h4><br />
+            <input type="button" onclick="mine()" class="btn-rdt" value="MINE" /><br />
+            <label>index:</label>
+            <input type="text" id="index" rows="2" class="form-control" readonly />
+            <label>timestamp:</label>
+            <input type="text" id="timestamp" rows="2" class="form-control" readonly />
+            <label>miner:</label>
+            <input type="text" id="miner" rows="2" class="form-control" readonly />
+            <label>amount:</label>
+            <input type="text" id="amount" rows="2" class="form-control" readonly />
+            <label>hash:</label>
+            <input type="text" id="hash" rows="2" class="form-control" readonly />
+        </div>
+    {% else %}
+        <br />
+        <div class="container">
+            <h4>you must login to mine</h4><br />
+            <a href="/login">LOGIN</a>
+        </div>
+    {% endif %}
     </div>
-    <br />
-    <div class="container">
-        <label>index:</label>
-        <input type="text" id="index" rows="2" class="form-control" readonly />
-        <label>timestamp:</label>
-        <input type="text" id="timestamp" rows="2" class="form-control" readonly />
-        <label>miner:</label>
-        <input type="text" id="miner" rows="2" class="form-control" readonly />
-        <label>amount:</label>
-        <input type="text" id="amount" rows="2" class="form-control" readonly />
-        <label>hash:</label>
-        <input type="text" id="hash" rows="2" class="form-control" readonly />
-    </div>
-
     <script src="/static/jquery/jquery-3.4.1.min.js"></script>
     <script src="/static/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script type="text/javascript">
@@ -38,7 +44,7 @@
                 type: "POST",
                 datatype: "json",
                 data: "username={{user}}",
-                success: function (response) {
+                success: function(response) {
                     transaction = response["transactions"].pop();
                     document.getElementById("index").value = response["index"];
                     document.getElementById("timestamp").value = response["timestamp"];
@@ -46,18 +52,11 @@
                     document.getElementById("amount").value = transaction["amount"];
                     document.getElementById("hash").value = response["previous_hash"];
                 },
-                error: function (error) {
+                error: function(error) {
                     document.write(error);
                 }
             });
         }
     </script>
-{% else %}
-    <br />
-    <div class="container">
-        <h4>you must login to mine</h4><br />
-        <a href="/login">LOGIN</a>
-    </div>
-{% endif %}
 </body>
 </html>

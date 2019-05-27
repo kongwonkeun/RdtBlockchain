@@ -35,6 +35,9 @@
     <Folder Include="static\jquery\" />
     <Folder Include="static\DataTables\" />
     <Folder Include="static\bootstrap\" />
+    <Folder Include="static\public\" />
+    <Folder Include="static\public\css\" />
+    <Folder Include="static\public\img\" />
     <Folder Include="templates\" />
     <Folder Include="static\" />
   </ItemGroup>
@@ -113,6 +116,9 @@
     <Content Include="static\jquery\jquery-3.4.1.slim.js" />
     <Content Include="static\jquery\jquery-3.4.1.slim.min.js" />
     <Content Include="static\jquery\jquery-3.4.1.slim.min.map" />
+    <Content Include="static\public\css\RDT_style.css" />
+    <Content Include="static\public\img\intro_background.png" />
+    <Content Include="templates\menu.html" />
     <Content Include="templates\nav.html" />
     <Content Include="templates\index.html" />
     <Content Include="templates\login.html" />

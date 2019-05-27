@@ -6,41 +6,43 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>welcome to k-roller</title>
     <link rel="stylesheet" href="/static/bootstrap/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/static/public/css/RDT_style.css" />
 </head>
 <body>
-{% include "./nav.html" %}
-{% if session['logged_in'] %}
-    <br />
-    <div class="container">
-        {% if data %}
-        <h4>{{data}}</h4><br />
-        {% endif %}
-        <h4>transaction</h4><br />
-        <form action="/transaction/make" method="POST">
-            <label>sender:</label><br />
-            <input type="text" name="sender" id="sender" /><br /><br />
-            <label>recipient:</label><br />
-            <input type="text" name="recipient" id="recipient" /><br /><br />
-            <label>amount:</label><br />
-            <input type="text" name="amount" id="amount" /><br /><br />
-            <input type="submit" value="TRANSACTION" />
-        </form>
+    <div class="bg">
+        {% include "./nav.html" %}
+    {% if session['logged_in'] %}
+        <br />
+        <div class="container">
+            {% if data %}
+            <h4>{{data}}</h4><br />
+            {% endif %}
+            <h4>transaction</h4><br />
+            <form action="/transaction/make" method="POST">
+                <label>sender:</label><br />
+                <input type="text" name="sender" id="sender" /><br /><br />
+                <label>recipient:</label><br />
+                <input type="text" name="recipient" id="recipient" /><br /><br />
+                <label>amount:</label><br />
+                <input type="text" name="amount" id="amount" /><br /><br />
+                <input type="submit" class="btn-rdt" value="TRANSACTION" />
+            </form>
+        </div>
+    {% else %}
+        <br />
+        <div class="container">
+            <h4>you must login to make a transaction</h4><br />
+            <a href="/login">LOGIN</a>
+        </div>
+    {% endif %}
     </div>
-
     <script src="/static/jquery/jquery-3.4.1.min.js"></script>
     <script src="/static/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script type="text/javascript">
-        $(document).ready(function () {
+        $(document).ready(function() {
             $("#sender").val("{{user}}");
             $("#amount").val("0");
         });
     </script>
-{% else %}
-    <br />
-    <div class="container">
-        <h4>you must login to make a transaction</h4><br />
-        <a href="/login">LOGIN</a>
-    </div>
-{% endif %}
 </body>
 </html>

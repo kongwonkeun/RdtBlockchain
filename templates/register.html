@@ -6,24 +6,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>welcome to k-roller</title>
     <link rel="stylesheet" href="/static/bootstrap/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/static/public/css/RDT_style.css?ver=0" />
 </head>
 <body>
-{% include "./nav.html" %}
-{% if session['logged_in'] %}
-    <br />
-    <div class="container">
-        <h4>why this page is shown</h4>
+    {% if session['logged_in'] %}
+    <div class="bg"></div>
+    {% else %}
+    <div class="bg-dark"></div>
+    <div class="div-layer">
+        <div class="div-form">
+            <div class="login-title">Register</div>
+            <form class="form-login" action="/reg" method="POST">
+                <input type="text" name="username" class="form-id" placeholder="ID" /><br /><br />
+                <input type="password" name="password" class="form-pw" placeholder="PW" /><br /><br />
+                <button type="submit" class="btn-login">Register</button>
+            </form>
+        </div>
     </div>
-{% else %}
-    <br />
-    <div class="container">
-        <h4>register</h4>
-        <form action="/reg" method="POST">
-            <input type="text" name="username" placeholder="user name" /><br /><br />
-            <input type="password" name="password" placeholder="password" /><br /><br />
-            <input type="submit" value="REGISTER" />
-        </form><br />
-    </div>
-{% endif %}
+    {% endif %}
 </body>
 </html>

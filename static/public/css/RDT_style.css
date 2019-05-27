@@ -1,0 +1,200 @@
+body, html {
+  height: 100%;
+  margin: 0;
+}
+
+.bg {
+  background-image: url("/static/public/img/intro_background.png");
+  height: 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.bg-dark {
+  background-image: url("/static/public/img/intro_background.png");
+  height: 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  filter: brightness(50%);
+}
+
+.nav-element {
+  color: rgb(256, 256, 256);
+  font-size: 40px;
+  margin-right: 10px;
+}
+
+.main-layer {
+  display: table;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-left: -536px;
+  margin-top: -115px;
+}
+
+.title-welcome {
+  color: rgb(256, 256, 256);
+  font-family: "Times New Roman", Times, serif;
+  text-shadow: 4px 2px 2px black;
+  font-size: 48px;
+}
+
+.title-RDT {
+  color: rgb(206, 61, 31);
+  font-family: "Times New Roman", Times, serif;
+  text-shadow: 4px 2px 2px black;
+  font-size: 64px;
+}
+
+.btn-login-main {
+  -webkit-border-radius: 60;
+  -moz-border-radius: 60;
+  border-radius: 60px;
+  border: none;
+  font-family: Arial;
+  color: rgb(256, 256, 256);
+  font-size: 24px;
+  background: rgb(206, 61, 31);
+  padding: 20px 70px 20px 70px;
+  text-decoration: none;
+  margin-top: 20px;
+}
+
+.btn-login-main:hover {
+  background: rgb(168, 50, 30);
+}
+
+.regis-main {
+  color: rgb(256, 256, 256);
+  font-size: 24px;
+  font-weight: bolder;
+  margin-left: 30px;
+}
+
+.regis-main:hover {
+  color: rgb(206, 62, 31);
+}
+
+.div-form {
+  display: inline-block;
+  width: 660px;
+  height: 750px;
+  background: #e6e6e6;
+}
+
+.login-title {
+  text-align: center;
+  font-family: "Times New Roman", Times, serif;
+  font-size: 54px;
+  margin: 180px 40px 35px;
+}
+
+.form-id, .form-pw {
+  padding: 12px 20px;
+  margin: 5px 30px;
+  font-size: 20px;
+  display: inline-block;
+  width: 580px;
+  height: 90px;
+  box-sizing: border-box;
+}
+
+.btn-login {
+  background-color: rgb(206, 61, 31);
+  text-align: center;
+  font-size: 30px;
+  border: none;
+  color: rgb(256, 256, 256);
+  padding: 14px 20px;
+  margin: 20px 30px;
+  width: 580px;
+  height: 90px;
+}
+
+.btn-login:hover {
+  opacity: 0.8;
+}
+
+.regis {
+  text-align: center;
+  font-size: 20px;
+  margin: 5px;
+  left: 50%;
+  color: rgb(206, 61, 31);
+}
+
+.regis:hover {
+  color: rgb(168, 50, 30);
+}
+
+.div-layer {
+  display: table;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-left: -330px;
+  margin-top: -350px;
+}
+
+.div-form {
+  display: table-cell;
+  vertical-align: center;
+  width: 660px;
+  height: 750px;
+  background: #e6e6e6;
+}
+
+.div-menu {
+  position: absolute;
+  top: 50%;
+  left: 0%;
+  margin-right: 0px;
+  margin-top: 0px;
+  display: table;
+}
+
+.btn-menu {
+  display: table-cell;
+  vertical-align: middle;
+  text-align: center;
+  background: #ffffff;
+  border: none;
+  border-radius: 20px;
+  font-size: 34px;
+  font-weight: bolder;
+  margin: 10px;
+  width: 270px;
+  height: 150px;
+}
+
+.btn-menu:hover {
+  background: rgb(170, 179, 175);
+}
+
+h4 {
+  color: rgb(255, 255, 255);
+}
+
+p {
+  color: rgb(255, 255, 255);
+}
+
+label {
+  color: rgb(255, 255, 255);
+}
+
+.btn-rdt {
+  color: #fff;
+  background-color: rgb(206, 61, 31);
+  border-color: rgb(206, 61, 31);
+  border-radius: 6px;
+}
+
+.btn-rdt:hover {
+  color: #fff;
+  background-color: rgb(168, 50, 30);
+  border-color: rgb(168, 50, 30);
+}

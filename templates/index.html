@@ -6,28 +6,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>welcome to k-roller</title>
     <link rel="stylesheet" href="/static/bootstrap/css/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="/static/public/css/RDT_style.css" />
 </head>
 <body>
-{% include "./nav.html" %}
-{% if session['logged_in'] %}
-    <br />
-    <div class="container">
-        <h4>you({{user}}) are logged in</h4><br />
-        <a href="/user/generate_wallet">GENERATE WALLET</a><br />
-        <a href="/wallet/show">WALLET</a><br />
-        <a href="/mining">MINING</a><br />
-        <a href="/transaction">TRANSACTION</a><br />
-        <a href="/transaction/view">TRANSACTIONS LIST</a><br />
-        <a href="/user/users">USER LIST</a><br />
-        <a href="/unreg">UNREGISTER</a><br />
+    <div class="bg">
+    {% if session['logged_in'] %}
+        {% include "./nav.html" %}
+        <br />
+        <div class="container">
+            <h4>you({{user}}) are logged in</h4>
+        </div>
+        {% include "./menu.html" %}
+    {% else %}
+        <div class="main-layer">
+            <div class="title-welcome">Welcome to</div>
+            <div class="title-RDT">RDT Coin Platform</div>
+            <button class="btn-login-main" onclick="location.href='/login'">Login</button>
+            <a class="regis-main" onclick="location.href = '/reg'">Register Now!</a>
+        </div>
+    {% endif %}
     </div>
-{% else %}
-    <br />
-    <div class="container">
-        <h4>you are not login</h4><br />
-        <a href="/login">LOGIN</a><br />
-        <a href="/reg">REGISTER</a>
-    </div>
-{% endif %}
 </body>
 </html>

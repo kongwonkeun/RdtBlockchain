@@ -6,23 +6,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>welcome to k-roller</title>
     <link rel="stylesheet" href="/static/bootstrap/css/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="/static/public/css/RDT_style.css" />
 </head>
 <body>
-{% include "./nav.html" %}
-{% if session['logged_in'] %}
-    <br />
-    <div class="container">
-        <h4>wallet generation</h4>
-        <p>click the button below to generate your({{user}}) wallet</p>
-        <input type="button" onclick="generate_wallet()" class="btn btn-primary btn-md" value="GENERATE" /><br /><br />
-        <label>private key:</label>
-        <textarea name="pri_key" id="pri_key" rows="10" class="form-control" readonly></textarea>
-        <label>public key:</label>
-        <textarea name="pub_key" id="pub_key" rows="5"  class="form-control" readonly></textarea>
-        <div id="warning" style="display:none">
-            <p>click the button below to save your wallet</p>
-            <input type="button" onclick="save_wallet()" class="btn btn-primary btn-md" value="SAVE" />
+    <div class="bg">
+        {% include "./nav.html" %}
+    {% if session['logged_in'] %}
+        <br />
+        <div class="container">
+            <h4>wallet generation</h4>
+            <p>click the button below to generate your({{user}}) wallet</p>
+            <input type="button" onclick="generate_wallet()" class="btn-rdt" value="GENERATE" /><br /><br />
+            <label>private key:</label>
+            <textarea name="pri_key" id="pri_key" rows="10" class="form-control" readonly></textarea>
+            <label>public key:</label>
+            <textarea name="pub_key" id="pub_key" rows="5" class="form-control" readonly></textarea>
+            <div id="warning" style="display:none">
+                <p>click the button below to save your wallet</p>
+                <input type="button" onclick="save_wallet()" class="btn-rdt" value="SAVE" />
+            </div>
         </div>
+    {% else %}
+    {% endif %}
     </div>
     <script src="/static/jquery/jquery-3.4.1.min.js"></script>
     <script src="/static/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -31,12 +36,12 @@
             $.ajax({
                 url: "/wallet/generate",
                 type: "GET",
-                success: function (response) {
+                success: function(response) {
                     document.getElementById("pri_key").innerHTML = response["private_key"];
                     document.getElementById("pub_key").innerHTML = response["public_key"];
                     document.getElementById("warning").style.display = "block";
                 },
-                error: function (error) {
+                error: function(error) {
                     document.write(error);
                 }
             });
@@ -46,17 +51,15 @@
                 url: "/wallet/save",
                 type: "POST",
                 dataType: "json",
-                data: "user_name={{user}}&"+$("#pri_key,#pub_key").serialize(),
-                success: function (response) {
+                data: "user_name={{user}}&" + $("#pri_key,#pub_key").serialize(),
+                success: function(response) {
                     location.href = "/wallet/show/{{user}}";
                 },
-                error: function (error) {
+                error: function(error) {
                     document.write(error);
                 }
             });
         }
     </script>
-{% else %}
-{% endif %}
 </body>
 </html>

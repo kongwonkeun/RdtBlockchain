@@ -6,73 +6,77 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>welcome to k-roller</title>
     <link rel="stylesheet" href="/static/bootstrap/css/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="/static/public/css/RDT_style.css" />
 </head>
 <body>
-{% include "./nav.html" %}
-{% if session['logged_in'] %}
-    <br />
-    <div class="container">
-        <h4>send coins</h4>
-        <p>check the transaction details and click the button to generate your transaction</p>
-        <form id="transaction_form">
-            <label>sender:</label>
-            <input type="text" name="sender" id="sender" rows="2" class="form-control" />
-            <label>sender key:</label>
-            <input type="text" name="sender_key" id="sender_key" rows="2" class="form-control" />
-            <label>recipient:</label>
-            <input type="text" name="recipient" id="recipient" rows="2" class="form-control" />
-            <label>amount:</label>
-            <input type="text" name="amount" id="amount" rows="2" class="form-control" />
-        </form><br /><br />
-        <input type="button" onclick="generate_transaction()" class="btn btn-primary btn-md" value="TRANSACTION" />
-    </div>
+    <div class="bg">
+        {% include "./nav.html" %}
+    {% if session['logged_in'] %}
+        <br />
+        <div class="container">
+            <h4>send coins</h4>
+            <p>check the transaction details and click the button to generate your transaction</p>
+            <form id="transaction_form">
+                <label>sender:</label>
+                <input type="text" name="sender" id="sender" rows="2" class="form-control" />
+                <label>sender key:</label>
+                <input type="text" name="sender_key" id="sender_key" rows="2" class="form-control" />
+                <label>recipient:</label>
+                <input type="text" name="recipient" id="recipient" rows="2" class="form-control" />
+                <label>amount:</label>
+                <input type="text" name="amount" id="amount" rows="2" class="form-control" />
+            </form><br /><br />
+            <input type="button" onclick="generate_transaction()" class="btn-rdt" value="TRANSACTION" />
+        </div>
 
-    <div class="modal modal-alert fade" id="request_trans_modal" tabindex="-1" role="dialog" aria-labelledby="request_trans_modal" aria-hidden="true">
-    <div class="modal-dialog">
-    <div class="modal-content">
-        <div class="modal-header">
-            <div class="modal-title col-md-10">confirm transaction details, enter a blockchain node url, and click the confirm button to finalize your transaction</div>
-            <button type="button" class="close col-md-2" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <div class="modal modal-alert fade" id="request_trans_modal" tabindex="-1" role="dialog" aria-labelledby="request_trans_modal" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <div class="modal-title col-md-10">confirm transaction details, enter a blockchain node url, and click the confirm button to finalize your transaction</div>
+                        <button type="button" class="close col-md-2" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="confirm_transaction_form">
+                            <label>sender:</label>
+                            <input type="text" name="sender" id="confirm_sender" rows="2" class="form-control" readonly />
+                            <label>receipient:</label>
+                            <input type="text" name="recipient" id="confirm_recipient" rows="2" class="form-control" readonly />
+                            <label>amount:</label>
+                            <input type="text" name="amount" id="confirm_amount" rows="2" class="form-control" readonly />
+                            <label>signature:</label>
+                            <input type="text" name="signature" id="confirm_signature" rows="2" class="form-control" readonly />
+                            <label>blockchain node url:</label>
+                            <input type="text" name="node_url" id="node_url" rows="2" class="form-control" value="http://127.0.0.1:5000" />
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" onclick="go_back()" class="btn btn-danger" data-dismiss="modal">CANCEL</button>
+                        <button type="button" onclick="send_transaction()" class="btn btn-success">CONFIRM</button>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="modal-body">
-        <form id="confirm_transaction_form">
-            <label>sender:</label>
-            <input type="text" name="sender" id="confirm_sender" rows="2" class="form-control" readonly />
-            <label>receipient:</label>
-            <input type="text" name="recipient" id="confirm_recipient" rows="2" class="form-control" readonly />
-            <label>amount:</label>
-            <input type="text" name="amount" id="confirm_amount" rows="2" class="form-control" readonly />
-            <label>signature:</label>
-            <input type="text" name="signature" id="confirm_signature" rows="2" class="form-control" readonly />
-            <label>blockchain node url:</label>
-            <input type="text" name="node_url" id="node_url" rows="2" class="form-control" value="http://127.0.0.1:5000" />
-        </form>
-        </div>
-        <div class="modal-footer">
-            <button type="button" onclick="go_back()" class="btn btn-danger" data-dismiss="modal">CANCEL</button>
-            <button type="button" onclick="send_transaction()" class="btn btn-success">CONFIRM</button>
-        </div>
-    </div>
-    </div>
-    </div>
 
-    <div class="modal modal-alert fade" id="success_trans_modal" tabindex="-1" role="dialog" aria-labelledby="success_trans_modal" aria-hidden="true">
-    <div class="modal-dialog">
-    <div class="modal-content">
-        <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <div class="modal modal-alert fade" id="success_trans_modal" tabindex="-1" role="dialog" aria-labelledby="success_trans_modal" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <h4 class="alert-heading">successful transaction</h4>
+                        <p>you successfully completed your transaction, it will be added to the next block</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" onclick="go_back()" id="finish_transaction" class="btn btn-success" data-dismiss="modal">OK</button>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="modal-body">
-            <h4 class="alert-heading">successful transaction</h4>
-            <p>you successfully completed your transaction, it will be added to the next block</p>
-        </div>
-        <div class="modal-footer">
-            <button type="button" onclick="go_back()" id="finish_transaction" class="btn btn-success" data-dismiss="modal">OK</button>
-        </div>
+    {% else %}
+    {% endif %}
     </div>
-    </div>
-    </div>
-
     <script src="/static/jquery/jquery-3.4.1.min.js"></script>
     <script src="/static/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script type="text/javascript">
@@ -130,7 +134,5 @@
             location.href = "/transaction";
         }
     </script>
-{% else %}
-{% endif %}
 </body>
 </html>

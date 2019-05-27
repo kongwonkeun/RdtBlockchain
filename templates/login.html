@@ -6,35 +6,30 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>welcome to k-roller</title>
     <link rel="stylesheet" href="/static/bootstrap/css/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="/static/public/css/RDT_style.css" />
 </head>
 <body>
-{% include "./nav.html" %}
-{% if session['logged_in'] %}
-    <br />
-    <div class="container">
-        <h4>you({{user}}) are logged in already</h4><br />
-        <a href="/user/generate_wallet">GENERATE WALLET</a><br />
-        <a href="/wallet/show">WALLET</a><br />
-        <a href="/mining">MINING</a><br />
-        <a href="/transaction">TRANSACTION</a><br />
-        <a href="/transaction/view">TRANSACTIONS LIST</a><br />
-        <a href="/user/users">USER LIST</a><br />
-        <a href="/unreg">UNREGISTER</a><br />
+    <div class="bg">
+    {% if session['logged_in'] %}
+        {% include "./nav.html" %}
+        <br />
+        {% include "./menu.html" %}
+    {% else %}
+        <div class="bg-dark"></div>
+        <div class="div-layer">
+            <div class="div-form">
+                <div class="login-title">RDT Coin Platform</div>
+                <form class="form-login" action="/login" method="POST">
+                    <input type="text" name="username" class="form-id" placeholder="ID" /><br />
+                    <input type="password" name="password" class="form-pw" placeholder="PW" /><br />
+                    <button type="submit" class="btn-login">Login</button>
+                </form>
+                <div class="regis">
+                    <span onclick="location.href='/reg'">Register Now!</span>
+                </div>
+            </div>
+        </div>
+    {% endif %}
     </div>
-{% else %}
-    <br />
-    <div class="container">
-        {% if data %}
-        <h4>{{data}}</h4>
-        {% endif %}
-        <h4>login</h4><br />
-        <form action="/login" method="POST">
-            <input type="text" name="username" placeholder="user name" /><br /><br />
-            <input type="password" name="password" placeholder="password" /><br /><br />
-            <input type="submit" value="LOGIN" />
-        </form><br />
-        <a href="/reg">REGISTER</a><br />
-    </div>
-{% endif %}
 </body>
 </html>
