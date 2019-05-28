@@ -50,8 +50,8 @@ body, html {
 }
 
 .btn-login-main {
-  -webkit-border-radius: 60;
-  -moz-border-radius: 60;
+  -webkit-border-radius: 60px;
+  -moz-border-radius: 60px;
   border-radius: 60px;
   border: none;
   font-family: Arial;
@@ -141,7 +141,7 @@ body, html {
 
 .div-form {
   display: table-cell;
-  vertical-align: center;
+  vertical-align: middle;
   width: 660px;
   height: 750px;
   background: #e6e6e6;
@@ -197,4 +197,17 @@ label {
   color: #fff;
   background-color: rgb(168, 50, 30);
   border-color: rgb(168, 50, 30);
+}
+
+/* ---- kong ---- set the color explicitly
+.dataTables_length {}
+.dataTables_filter {}
+.dataTables_pagenate {} */
+
+.dataTable {
+    color: #000000;
+    background-color: #ffffff;
+}
+.dataTables_info {
+    color: #ffffff;
 }
